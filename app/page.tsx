@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { QrCode, Settings } from "lucide-react"
+import { Settings, Users, Building, Scan } from "lucide-react"
 
 export default function HomePage() {
   return (
@@ -13,11 +13,12 @@ export default function HomePage() {
         </div>
 
         <div className="space-y-4">
-          <Card>
+          {/* Escaneo QR - Función principal */}
+          <Card className="border-2 border-blue-200">
             <CardHeader className="text-center">
-              <QrCode className="h-12 w-12 mx-auto text-blue-600 mb-2" />
-              <CardTitle>Escanear QR</CardTitle>
-              <CardDescription>Escanea el código QR para entregar o devolver sillas</CardDescription>
+              <Scan className="h-12 w-12 mx-auto text-blue-600 mb-2" />
+              <CardTitle className="text-blue-800">Escanear QR</CardTitle>
+              <CardDescription>Escanea códigos QR para entregar o devolver sillas</CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/escaneo">
@@ -28,11 +29,28 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
+          {/* Crear Reserva */}
           <Card>
             <CardHeader className="text-center">
-              <Settings className="h-12 w-12 mx-auto text-green-600 mb-2" />
+              <Users className="h-12 w-12 mx-auto text-green-600 mb-2" />
+              <CardTitle>Nueva Reserva</CardTitle>
+              <CardDescription>Crear reserva de sillas para pasajero</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/reserva/nueva">
+                <Button variant="outline" className="w-full" size="lg">
+                  Crear Reserva
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Panel Admin */}
+          <Card>
+            <CardHeader className="text-center">
+              <Settings className="h-12 w-12 mx-auto text-purple-600 mb-2" />
               <CardTitle>Panel de Admin</CardTitle>
-              <CardDescription>Gestionar coordinadores, hoteles y reservas</CardDescription>
+              <CardDescription>Gestionar coordinadores, hoteles y configuración</CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/admin">
@@ -43,20 +61,22 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="text-center">
-              <QrCode className="h-12 w-12 mx-auto text-purple-600 mb-2" />
-              <CardTitle>Probar QR</CardTitle>
-              <CardDescription>Verificar generación de códigos QR</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/test-qr">
-                <Button variant="outline" className="w-full" size="lg">
-                  Probar QR
-                </Button>
+          {/* Accesos rápidos */}
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="p-4">
+              <Link href="/admin/coordinadores" className="block text-center">
+                <Users className="h-8 w-8 mx-auto text-blue-500 mb-2" />
+                <p className="text-sm font-medium">Coordinadores</p>
               </Link>
-            </CardContent>
-          </Card>
+            </Card>
+
+            <Card className="p-4">
+              <Link href="/admin/hoteles" className="block text-center">
+                <Building className="h-8 w-8 mx-auto text-green-500 mb-2" />
+                <p className="text-sm font-medium">Hoteles</p>
+              </Link>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

@@ -62,3 +62,4 @@ test-results/
 # Directorios específicos del proyecto (agrega los que necesites)
 vendor/
 public/uploads/
+src/modelo_tusillita.sql

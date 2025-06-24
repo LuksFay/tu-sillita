@@ -17,6 +17,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000, // 10 segundos timeout
 })
 
 // Interceptor para manejo de errores
@@ -24,6 +25,20 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error("API Error:", error.response?.data || error.message)
+
+    // Mensajes de error más amigables
+    if (error.code === "ECONNREFUSED") {
+      throw new Error("No se puede conectar al servidor. ¿Está corriendo en localhost:4000?")
+    }
+
+    if (error.response?.status === 404) {
+      throw new Error("Endpoint no encontrado")
+    }
+
+    if (error.response?.status >= 500) {
+      throw new Error("Error del servidor")
+    }
+
     return Promise.reject(error)
   },
 )
@@ -34,16 +49,13 @@ export const coordinadorApi = {
   create: (data: CreateCoordinadorRequest) => api.post<Coordinador>("/coordinadores", data),
   update: (id: string, data: Partial<CreateCoordinadorRequest>) => api.put<Coordinador>(`/coordinadores/${id}`, data),
   delete: (id: string) => api.delete(`/coordinadores/${id}`),
-
-  // ⚠️ INCOMPATIBILIDAD: Este endpoint no existe en tu backend
-  // getByQR: (qr_code: string) => api.get<Coordinador>(`/coordinadores/qr/${qr_code}`),
 }
 
 // 🔥 PAX (PASAJEROS)
 export const paxApi = {
   getAll: () => api.get<Pax[]>("/pax"),
   create: (data: CreatePaxRequest) => api.post<Pax>("/pax", data),
-  getByQR: (qr_code: string) => api.get<Pax>(`/pax/qr/${qr_code}`), // ⚠️ Asumo que existe
+  getByQR: (qr_code: string) => api.get<Pax>(`/pax/qr/${qr_code}`),
   updateEstado: (id: string, estado: "pendiente" | "entregado" | "devuelto") => api.put(`/pax/${id}`, { estado }),
 }
 
@@ -71,14 +83,12 @@ export const escaneoApi = {
   create: (data: CreateEscaneoRequest) => api.post<Escaneo>("/escaneo", data),
 }
 
-// ⚠️ AUTENTICACIÓN - No veo endpoints en tu backend
-export const authApi = {
-  // login: (credentials) => api.post("/auth/login", credentials),
-  // Usando autenticación simple por ahora
-  login: (password: string) => {
-    return Promise.resolve({
-      success: password === "admin123",
-      token: password === "admin123" ? "mock-token" : null,
-    })
-  },
+// Test de conexión
+export const testConnection = async () => {
+  try {
+    const response = await api.get("/coordinadores")
+    return { success: true, message: "Conexión exitosa" }
+  } catch (error) {
+    return { success: false, message: error.message }
+  }
 }

@@ -21,14 +21,15 @@ export const getById = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-  const { coordinador_id, hotel_id, nombre, cantidad_sillas, qr_code, estado, fecha_creacion } = req.body
+  const { coordinador_id, hotel_id, nombre, cantidad_sillas } = req.body
+  const qr_code = uuidv4()
   try {
+    const qrDataURL = await QRCode.toDataURL(qr_code)
     const result = await db.query(
-      `INSERT INTO pax (coordinador_id, hotel_id, nombre, cantidad_sillas, qr_code, estado, fecha_creacion)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [coordinador_id, hotel_id, nombre, cantidad_sillas, qr_code, estado, fecha_creacion]
+      'INSERT INTO pax (coordinador_id, hotel_id, nombre, cantidad_sillas, qr_code, estado, fecha_creacion) VALUES ($1, $2, $3, $4, $5, $6, NOW()) RETURNING *',
+      [coordinador_id, hotel_id, nombre, cantidad_sillas, qr_code, 'pendiente']
     )
-    res.status(201).json(result.rows[0])
+    res.status(201).json({ ...result.rows[0], qr_image: qrDataURL })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -66,9 +67,7 @@ export const getByQrCode = async (req, res) => {
   const { qr_code } = req.params
   try {
     const result = await db.query('SELECT * FROM pax WHERE qr_code = $1', [qr_code])
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'QR no encontrado' })
-    }
+    if (result.rows.length === 0) return res.status(404).json({ error: 'QR no encontrado' })
     res.status(200).json(result.rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })
@@ -80,14 +79,8 @@ export const updateEstado = async (req, res) => {
   const { id } = req.params
   const { estado } = req.body
   try {
-    const result = await db.query(
-      'UPDATE pax SET estado = $1 WHERE id = $2 RETURNING *',
-      [estado, id]
-    )
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Pasajero no encontrado' })
-    }
-    res.status(200).json({ message: 'Estado actualizado', data: result.rows[0] })
+    const result = await db.query('UPDATE pax SET estado = $1 WHERE id = $2 RETURNING *', [estado, id])
+    res.status(200).json(result.rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

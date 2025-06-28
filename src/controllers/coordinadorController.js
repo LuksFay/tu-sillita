@@ -1,5 +1,6 @@
 import db from '../models/db.js'
-
+import QRCode from 'qrcode'
+import { v4 as uuidv4 } from 'uuid'
 export const getAll = async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM coordinador')
@@ -20,15 +21,17 @@ export const getById = async (req, res) => {
   }
 }
 
+
 export const create = async (req, res) => {
-  const { nombre, empresa_id, tiempo_id, comision, qr_code } = req.body
+  const { nombre, empresa_id, tiempo_id, comision } = req.body
+  const qr_code = uuidv4()
   try {
+    const qrDataURL = await QRCode.toDataURL(qr_code)
     const result = await db.query(
-      `INSERT INTO coordinador (nombre, empresa_id, tiempo_id, comision, qr_code)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      'INSERT INTO coordinador (nombre, empresa_id, tiempo_id, comision, qr_code) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [nombre, empresa_id, tiempo_id, comision, qr_code]
     )
-    res.status(201).json(result.rows[0])
+    res.status(201).json({ ...result.rows[0], qr_image: qrDataURL })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -67,9 +70,7 @@ export const getByQrCode = async (req, res) => {
   const { qr_code } = req.params
   try {
     const result = await db.query('SELECT * FROM coordinador WHERE qr_code = $1', [qr_code])
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Coordinador no encontrado' })
-    }
+    if (result.rows.length === 0) return res.status(404).json({ error: 'QR no encontrado' })
     res.status(200).json(result.rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })

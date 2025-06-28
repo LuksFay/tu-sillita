@@ -60,3 +60,6 @@ export const remove = async (req, res) => {
     res.status(500).json({ error: error.message })
   }
 }
+
+//getByQrCode (rq,res) para buscar pax por su codigo QR
+//updateEstado(req,res) actualizar el estado del pox

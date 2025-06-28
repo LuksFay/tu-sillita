@@ -60,3 +60,5 @@ export const remove = async (req, res) => {
     res.status(500).json({ error: error.message })
   }
 }
+
+//getByQrCode(req, res) buscar coordinador por su código QR.

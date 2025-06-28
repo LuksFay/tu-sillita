@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get('/', CoordinadorController.getAll)
 router.get('/:id', CoordinadorController.getById)
+router.get('/qr/:qr_code', CoordinadorController.getByQrCode)
 router.post('/', CoordinadorController.create)
 router.put('/:id', CoordinadorController.update)
 router.delete('/:id', CoordinadorController.remove)

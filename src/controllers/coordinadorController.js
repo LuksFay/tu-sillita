@@ -62,3 +62,16 @@ export const remove = async (req, res) => {
 }
 
 //getByQrCode(req, res) buscar coordinador por su código QR.
+// Buscar un coordinador por su QR
+export const getByQrCode = async (req, res) => {
+  const { qr_code } = req.params
+  try {
+    const result = await db.query('SELECT * FROM coordinador WHERE qr_code = $1', [qr_code])
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Coordinador no encontrado' })
+    }
+    res.status(200).json(result.rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}

@@ -1,6 +1,5 @@
 import express from 'express';
-import cors from 'cors'; // 👈 importar cors
-
+import cors from 'cors';
 import coordinadorRoutes from './routes/coordinadorRoutes.js';
 import paxRoutes from './routes/paxRoutes.js';
 import hotelRoutes from './routes/hotelRoutes.js';
@@ -18,7 +17,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// 🔗 Tus rutas
+
 app.use('/api/coordinadores', coordinadorRoutes);
 app.use('/api/pax', paxRoutes);
 app.use('/api/hotel', hotelRoutes);

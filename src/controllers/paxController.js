@@ -61,5 +61,34 @@ export const remove = async (req, res) => {
   }
 }
 
-//getByQrCode (rq,res) para buscar pax por su codigo QR
-//updateEstado(req,res) actualizar el estado del pox
+// Buscar un pasajero por su código QR
+export const getByQrCode = async (req, res) => {
+  const { qr_code } = req.params
+  try {
+    const result = await db.query('SELECT * FROM pax WHERE qr_code = $1', [qr_code])
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'QR no encontrado' })
+    }
+    res.status(200).json(result.rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+// Actualizar el estado del pasajero
+export const updateEstado = async (req, res) => {
+  const { id } = req.params
+  const { estado } = req.body
+  try {
+    const result = await db.query(
+      'UPDATE pax SET estado = $1 WHERE id = $2 RETURNING *',
+      [estado, id]
+    )
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Pasajero no encontrado' })
+    }
+    res.status(200).json({ message: 'Estado actualizado', data: result.rows[0] })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}

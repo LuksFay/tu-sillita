@@ -1,0 +1,1 @@
+ALTER TABLE coordinador ADD qr_image TEXT;

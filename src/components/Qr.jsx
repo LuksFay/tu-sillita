@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Qr = () => {
+const Qr = () => {
   return (
     <>
     <section>
@@ -21,3 +21,4 @@ export const Qr = () => {
     </>
   )
 }
+export default Qr

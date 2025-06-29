@@ -1,0 +1,32 @@
+import { useNavigate, useLocation } from 'react-router-dom'
+import './NavBar.css'
+
+const NavBar = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const isActive = (path) => location.pathname === path
+
+  const handleNavigation = (path) => {
+    navigate(path)
+  }
+
+  return (
+    <nav className="bottom-nav">
+      <ul>
+        <li className={isActive('/qr') ? 'active' : ''}>
+          <button onClick={() => handleNavigation('/qr')}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-qr-code-icon lucide-scan-qr-code"><path d="M17 12v4a1 1 0 0 1-1 1h-4"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M17 8V7"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M7 17h.01"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="5" height="5" rx="1"/></svg>
+          </button>
+        </li>
+        <li className={isActive('/dashboard') ? 'active' : ''}>
+          <button onClick={() => handleNavigation('/dashboard')}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  )
+}
+
+export default NavBar

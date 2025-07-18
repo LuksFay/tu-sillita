@@ -23,18 +23,21 @@ export const getById = async (req, res) => {
 
 export const create = async (req, res) => {
   const { nombre, empresa_id, tiempo_id, comision } = req.body
-  const qr_code = uuidv4()
+  const qr_code = uuidv4() // valor identificador que se guarda en la base
+  const qrLink = `http://192.168.0.6:5173/formulario/${qr_code}` // link real para usar en QR
+
   try {
-    const qrDataURL = await QRCode.toDataURL(qr_code) // ← genera el PNG en base64
+    const qrDataURL = await QRCode.toDataURL(qrLink) // QR apunta al link del formulario
     const result = await db.query(
       'INSERT INTO coordinador (nombre, empresa_id, tiempo_id, comision, qr_code, qr_image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [nombre, empresa_id, tiempo_id, comision, qr_code, qrDataURL] // ← usa qrDataURL acá
+      [nombre, empresa_id, tiempo_id, comision, qr_code, qrDataURL]
     )
-    res.status(201).json(result.rows[0]) // ← ya incluye qr_image
+    res.status(201).json(result.rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
 }
+
 
 export const update = async (req, res) => {
   const { id } = req.params

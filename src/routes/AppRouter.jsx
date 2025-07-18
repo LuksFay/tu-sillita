@@ -4,6 +4,7 @@ import  Home  from '../pages/Home'
 import  Dashboard  from '../pages/Dashboard'
 import  Qr  from '../components/qr/Qr'
 import NavBar from '../components/navbar/NavBar'
+import  FormularioPax  from '../pages/FormularioPax'
 const AppRouter = () => {
   return (
     <Router>
@@ -12,6 +13,8 @@ const AppRouter = () => {
             <Route path="/" element={<Home/>}/>
             <Route path="/qr" element={<Qr/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
+            <Route path="/formulario/:qr_code" element={<FormularioPax />} />
+
         </Routes>
       </div>
       <NavBar />

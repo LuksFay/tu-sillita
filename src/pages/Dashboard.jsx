@@ -1,28 +1,31 @@
 // src/pages/Dashboard.jsx
-import React, { useState } from 'react'
-import DashCoordinadores from '../components/DashCoordinadores'
-import DashHoteles from '../components/DashHoteles'
-import DashReservas from '../components/DashReservas'
-import DashReportes from '../components/DashReportes'
-import './Dashboard.css'
+import React, { useState } from "react";
+import DashCoordinadores from "../components/DashCoordinadores";
+import DashHoteles from "../components/DashHoteles";
+import DashReservas from "../components/DashReservas";
+import DashReportes from "../components/DashReportes";
+import DashEmpresas from "../components/DashEmpresas";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('coordinadores')
+  const [activeTab, setActiveTab] = useState("coordinadores");
 
   const renderSection = () => {
     switch (activeTab) {
-      case 'coordinadores':
-        return <DashCoordinadores />
-      case 'hoteles':
-        return <DashHoteles />
-      case 'reservas':
-        return <DashReservas />
-      case 'reportes':
-        return <DashReportes />
+      case "coordinadores":
+        return <DashCoordinadores />;
+      case "hoteles":
+        return <DashHoteles />;
+      case "empresas":
+        return <DashEmpresas />;
+      case "reservas":
+        return <DashReservas />;
+      case "reportes":
+        return <DashReportes />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <>
@@ -33,18 +36,52 @@ const Dashboard = () => {
         </div>
         <div className="dashboard-tabs">
           <ul>
-            <li><button className={activeTab === 'coordinadores' ? 'active' : ''} onClick={() => setActiveTab('coordinadores')}>Coordinadores</button></li>
-            <li><button className={activeTab === 'hoteles' ? 'active' : ''} onClick={() => setActiveTab('hoteles')}>Hoteles</button></li>
-            <li><button className={activeTab === 'reservas' ? 'active' : ''} onClick={() => setActiveTab('reservas')}>Reservas</button></li>
-            <li><button className={activeTab === 'reportes' ? 'active' : ''} onClick={() => setActiveTab('reportes')}>Reportes</button></li>
+            <li>
+              <button
+                className={activeTab === "coordinadores" ? "active" : ""}
+                onClick={() => setActiveTab("coordinadores")}
+              >
+                Coordinadores
+              </button>
+            </li>
+            <li>
+              <button
+                className={activeTab === "hoteles" ? "active" : ""}
+                onClick={() => setActiveTab("hoteles")}
+              >
+                Hoteles
+              </button>
+            </li>
+            <li>
+              <button
+                className={activeTab === "empresas" ? "active" : ""}
+                onClick={() => setActiveTab("empresas")}
+              >
+                Empresas
+              </button>
+            </li>
+            <li>
+              <button
+                className={activeTab === "reservas" ? "active" : ""}
+                onClick={() => setActiveTab("reservas")}
+              >
+                Reservas
+              </button>
+            </li>
+            <li>
+              <button
+                className={activeTab === "reportes" ? "active" : ""}
+                onClick={() => setActiveTab("reportes")}
+              >
+                Reportes
+              </button>
+            </li>
           </ul>
         </div>
       </section>
-      <section className="dashboard-content">
-        {renderSection()}
-      </section>
+      <section className="dashboard-content">{renderSection()}</section>
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

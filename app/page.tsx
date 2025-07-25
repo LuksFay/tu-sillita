@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Settings, Users, Building, Scan } from "lucide-react"
+import { Settings, Users, Building, Scan, Wifi } from "lucide-react"
 
 export default function HomePage() {
   return (
@@ -10,9 +10,26 @@ export default function HomePage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Tu Sillita</h1>
           <p className="text-gray-600">Sistema de alquiler de sillas</p>
+          <p className="text-xs text-gray-500 mt-1">Conectado a tusillitaapi.arcadeestudio.com.br</p>
         </div>
 
         <div className="space-y-4">
+          {/* Test de Conexión - NUEVO */}
+          <Card className="border-2 border-green-200">
+            <CardHeader className="text-center">
+              <Wifi className="h-12 w-12 mx-auto text-green-600 mb-2" />
+              <CardTitle className="text-green-800">Test de Conexión</CardTitle>
+              <CardDescription>Verificar que la API funciona correctamente</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/test-connection">
+                <Button className="w-full bg-green-600 hover:bg-green-700" size="lg">
+                  Probar Conexión
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
           {/* Escaneo QR - Función principal */}
           <Card className="border-2 border-blue-200">
             <CardHeader className="text-center">
@@ -38,7 +55,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <Link href="/reserva/nueva">
-                <Button variant="outline" className="w-full" size="lg">
+                <Button variant="outline" className="w-full bg-transparent" size="lg">
                   Crear Reserva
                 </Button>
               </Link>
@@ -54,7 +71,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <Link href="/admin">
-                <Button variant="outline" className="w-full" size="lg">
+                <Button variant="outline" className="w-full bg-transparent" size="lg">
                   Acceder
                 </Button>
               </Link>

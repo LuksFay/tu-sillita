@@ -1,24 +1,25 @@
-// Tipos actualizados para tu backend real
+// Tipos actualizados para tu API real
 export interface Coordinador {
-  id: string
+  id: number
   nombre: string
-  empresa_id: string
-  tiempo_id: string
+  empresa_id: number
+  tiempo_id: number
   comision: number
   qr_code: string
-  // Relaciones populadas
+  qr_image?: string
+  // Relaciones populadas (si tu API las incluye)
   empresa?: Empresa
   tiempo?: Tiempo
 }
 
 export interface Pax {
-  id: string
+  id: number
+  coordinador_id: number
+  hotel_id: number
   nombre: string
-  hotel_id: string
-  coordinador_id: string
   cantidad_sillas: number
-  estado: "pendiente" | "entregado" | "devuelto"
   qr_code: string
+  estado: "pendiente" | "entregado" | "devuelto"
   fecha_creacion: string
   // Relaciones populadas
   hotel?: Hotel
@@ -26,45 +27,58 @@ export interface Pax {
 }
 
 export interface Hotel {
-  id: string
+  id: number
   nombre: string
   gps?: string
 }
 
 export interface Empresa {
-  id: string
+  id: number
   nombre: string
+  comision: number
 }
 
 export interface Tiempo {
-  id: string
-  nombre: string
-  // Asumo que puede tener descripción o fechas
-  descripcion?: string
+  id: number
+  dia_entrada: string
+  dia_salida: string
+  dia_retirada: string
 }
 
 export interface Escaneo {
-  id: string
-  pax_id: string
+  id: number
+  pax_id: number
   fecha: string
-  tipo: "entrega" | "devolucion"
+  tipo: "entregado" | "devuelto"
   // Relación populada
   pax?: Pax
 }
 
-// DTOs para crear
-export interface CreateCoordinadorRequest {
-  nombre: string
-  empresa_id: string
-  tiempo_id: string
+export interface Precios {
+  id: number
+  valor5: number
+  valor7: number
+  valor10: number
   comision: number
 }
 
-export interface CreatePaxRequest {
+// DTOs para crear (sin ID)
+export interface CreateCoordinadorRequest {
   nombre: string
-  hotel_id: string
-  coordinador_id: string
+  empresa_id: number
+  tiempo_id: number
+  comision: number
+  qr_code: string
+}
+
+export interface CreatePaxRequest {
+  coordinador_id: number
+  hotel_id: number
+  nombre: string
   cantidad_sillas: number
+  qr_code: string
+  estado: "pendiente" | "entregado" | "devuelto"
+  fecha_creacion: string
 }
 
 export interface CreateHotelRequest {
@@ -72,7 +86,19 @@ export interface CreateHotelRequest {
   gps?: string
 }
 
+export interface CreateEmpresaRequest {
+  nombre: string
+  comision: number
+}
+
+export interface CreateTiempoRequest {
+  dia_entrada: string
+  dia_salida: string
+  dia_retirada: string
+}
+
 export interface CreateEscaneoRequest {
-  pax_id: string
-  tipo: "entrega" | "devolucion"
+  pax_id: number
+  fecha: string
+  tipo: "entregado" | "devuelto"
 }
